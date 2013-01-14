@@ -1,0 +1,219 @@
+﻿/* Spiel: Mensch aergere dich nicht:
+ *
+ * Hier können aktuelle Infos, ToDos und sonstiges vermerkt werden
+ * 
+ *  [Dringend] 
+ *  --> Bugs:
+ *		- KI zieht nicht nach Netzwerkspieler unter bestimmten Bedingungen
+ *  --> Schönere Lösung für "Rausschmeiß Effekt"
+ *  --> Netzwerk:
+ *  --> Einstellungen schwinden bei beiden seiten, wenn eine geschlossen wird.
+ *  --> nach dem Öffnen des Menus muss die KI manuell angestartet werden
+ *  --> Spiel blockiert bei server verbindung
+ *  --> Verbindung vorhanden Prüfung -> Meldung wenn getrennt
+ *  --> Logfeld springt nach oben
+ *  --> Zurück skaliert Vollbildmodus nicht neu
+ *  
+ *  [Noch zu Implementieren]
+ *  -->  Kickstatistik
+ *  --> Bug: KI priviligiert falsch beim Rückwärtsschlagen Modus
+ *  --> SpielVarianten :
+ *		- 3 Sechsen rausschmiss (aktuell sinnfrei)
+ *      - Überspringen im Ziel verboten
+ *      - Barrieren    
+ *		- Abkürzungen (spaja)
+ *  --> Startup ini
+ *  --> Würfel animieren
+ *  --> ( Englisch )
+ *  --> Bilder und Animationen
+ *  --> Schritte der einzelnen Farben Zählen
+ *  --> Plugins [Schwer]
+ *  --> Zug verwerfen / nur mögliche ziehen / überschüssige zurück laufen (Daniel)
+ *  --> Lan Lobby
+ *  --> Netzwerk (IPv6 Unterstützung)
+ *  --> Netzwerk 3+ Netzwerkspieler Inplementieren
+ * 
+ *  [Vermutlich behobene Bugs]
+ *  --> beim Spiel in die Einstellungen bringt Würfel durcheinander.
+ *  --> Netzwerkspielder nach Netzwerk trennen noch da,
+ *  --> Falsche Figur darf ziehen / die rote obwohl Blau
+ *
+ * Changelog 2.0:
+ * Version 2.0.1.1
+ *
+ * Version 2.0.1.0
+ * 29.11.2011 BugFix Updater liest unter bestimmten Bedingungen falsch aus
+ * 28.05.2012 Opitonsmenu überarbeitet (thx rinii)
+ * 28.05.2012 Bugfix: Nicht existentes Theme wird nun nicht mehr versucht zu laden
+ * 28.05.2012 Bugfix: 0 - Fehler beim Senden gibt nun Fehlermeldung aus [war extrem selten]
+ * 28.05.2012 Bugfix: Crash bei Klick unter der IP aus dem Scanfeld
+ * 28.05.2012 Bugfix: Speichervorgang kann nun abgebrochen werden
+ * 28.05.2012 Lanspiel durch Korrekturabfragen stabilisiert
+ * 28.05.2012 Bugfix: "Neues Spiel" kann nicht mehr vom Client angefangen werden
+ * 28.05.2012 Neue Stadardspielfiguren
+ * 28.05.2012 Schritt für Schritt ziehen deaktivert - zu verbuggt
+ * 29.05.2012 Verbesserung des Laden Funktion
+ * 29.05.2012 Im Netzwerk werden die Farben der Würfelanzeige nun übertragen
+ * 29.05.2012 Diverse Korrekturen an der Netzwerkmechanik
+ * 30.05.2012 Getestet: Lan Modus unterstützt nur 2 Spieler!
+ * 30.05.2012 Serverseitige Inplementation von IPv6 (ungetestet)
+ * 30.05.2012 Fehlermeldungen vom Client werden nicht mehr am Server ausgegeben
+ * 01.06.2012 Option: KI pausiert zwischen den Zügen (thx Merlin) [Nicht Netzwerkfähig]
+ * 01.06.2012 Dev Version ignoriert nun Beta 5 Update (Bestimmte Updates können ausgeschlossen werden)
+ * 01.06.2012 Farben werden nun bei Neu Button mit zurück gesetzt
+ * 02.06.2012 Verbindung getrennt Meldung inplementiert (nur wenn gegenseite Spiel beendet)
+ * 02.06.2012 Netzwerk Würfel syncronisation verbessert
+ * 02.06.2012 KI startet besser an
+ * 02.06.2012 Pause anzeige eingefügt [Netzwerk]
+ *
+ * Version 2.0.0.0 -> Beta 5
+ * 14.10.2011 BugFix: Gelb und Grün bei CustomSkinname vertauscht
+ * 14.10.2011 BugFix: Würfel / Bäm Schild überschneidet sich nicht mehr mit Figuren
+ * 16.10.2011 BugFix: Schritt für Schritt wieder einstellbar
+ * 16.10.2011 Schritt für Schritt engine verbessert, zieht nun ohne ruckler
+ * 16.10.2011 Soundengin verbessert, verzögern jetzt nicht mehr.
+ * 27.11.2011 Netzwerkklasse nun auch UDP Fähig [grobe Implementation]
+ * 27.11.2011 Broadcastfunktion implementiert [nicht nutzbar]
+ * 27.11.2011 Weitere Netzwerkkommunikation hinzugefügt.
+ * 28.11.2011 Netzwerkdialog umgestaltet
+ * 28.11.2011 Div Fixes im Netzwerk - Netzwerkspiel nun wesentlich stabiler
+ * 28.11.2011 Auswahl zwischen UDP und TCP
+ * 28.11.2011 Server Scan hinzugefügt
+ *
+ * Version 2.0.0.0 -> Beta 4.1
+ * 13.10.2011 KI auf Computer geändert (verständlicher) (thx Catty)
+ * 13.10.2011 BugFix: Custom Skin Grün funktionierte nicht
+ *
+ * Version 2.0.0.0 -> Beta 4
+ * 08.10.2011 Doppelbuffer ist nun Standart (kann man nicht mehr auswählen)
+ * 08.10.2011 Würfel hat GlowEffekt wenn er betätigt werden muss
+ * 08.10.2011 BugFix: Nach gewonnenen Spiel konnte kein "Neues Spiel" gestarted werden
+ * 08.10.2011 KI Zugsystem verbessert - Form hängt nicht mehr
+ * 08.10.2011 KI vs KI nun möglich
+ * 08.10.2011 BugFix: Züge unter bestimmten umständen nicht möglich [again] #3
+ * 09.10.2011 Optionsmenu umstrukturiert (Tabs)
+ * 09.10.2011 IP Adressen werden nun im Netzwerkdialog ermittelt
+ * 10.10.2011 Netzwerkkommunikation funktioniert nun [Client listen / Send Befehl] (Instabile Verbindung)
+ * 10.10.2011 Schließen der Form wird in Funktion geleitet
+ * 10.10.2011 Host wird abgerufen
+ * 10.10.2011 "Abbrechen" Button in die Einstellungen übernommen.
+ * 11.10.2011 Positionssystem überarbeitet, nun frei skalierbar.
+ * 13.10.2011 Laden funktion überarbeitet
+ * 13.10.2011 Custom Style per xml Datei einlesbar 
+ * 13.10.2011 experimenteller Vollbildmodus (/voll)
+ *
+ * Version 2.0.0.0 -> Beta 3
+ * 03.10.2011 Netzwerkkommunikation (/sconnect /cconnect /creceive /cdisconnect /say)
+ * 03.10.2011 Zugmechanismus überarbeitet (Gilt nun für Spieler und KI)
+ * 03.10.2011 Weiterer Netbook Fix
+ * 03.10.2011 BugFix: Figuren vor dem Ziel unter bestimmten Bedingungen nicht ziehbar [again]
+ * 04.10.2011 Rückwärtsschlagen inplementiert
+ * 04.10.2011 Soundeffekte können nun ausgegeben werden (win, kick, zug, wurf).
+ * 04.10.2011 DoppelPuffer vermindert flackern (Option)
+ * 04.10.2011 Optionsmenu umstrukturiert
+ * 04.10.2011 Netzwerk Verbindungsdialog hinzugefügt (Aktivieren mit /net )
+ * 04.10.2011 Neues Icon
+ * 04.10.2011 Würfelbild zeigt nun an welche Figur am Zug ist.
+ * 04.10.2011 GUI komplett überarbeitet
+ * 04.10.2011 Würfelalgorithmus verändert
+ * 05.10.2011 Rausschmiss -> Bäm eingebaut
+ * 05.10.2011 Spielfiguren können durch eigene Bilder ersetzt werden: 30x45px blau.png/rot.png/gelb.png/gruen.png
+ * 05.10.2011 Neue Konsolenmeldungen hinzugefügt
+ *
+ * Version 2.0.0.0 -> Beta 2
+ * 24.09.2011 Größe angepasst (Netbook fähig)
+ * 24.09.2011 Alle Spielfiguren Positionen neu gesetzt
+ * 24.09.2011 BugFix: Ladebildschirm nun abbrechbar ohne neue Ladebildschirm zu erzeugen
+ * 24.09.2011 BugFix: Nach Update erscheint wieder der Changelog
+ * 24.09.2011 (Grundlegende Netzwerk Verbindungsmöglichkeiten inplementiert, nicht Nutzbar)
+ *
+ * Version 2.0.0.0 -> Beta
+ * 19.09.2011 BugFix: Figuren schmeißen sich im Ziel raus
+ * 19.09.2011 Prototyp einer neuen KI inplementiert
+ * 21.09.2011 Speichern Funktion inplementiert
+ * 23.09.2011 Laden Funktion inplementiert
+ *
+ * Version 2.0.0.0 -> Alpha
+ * 13.09.2011 Komplett neudesingte Form
+ * 13.09.2011 Grundlegende Zugfunktion integriert
+ * 13.09.2011 Funktion überwacht das nicht mehr als eine Figur auf einen Feld stehen darf
+ * 14.09.2011 Grobes Zugsystem inplementiert - Alle Farben sind nun Spielbar
+ * 14.09.2011 Updater clientseitig eingerichtet
+ * 14.09.2011 Reset Funktion inplementiert
+ * 14.09.2011 Konsolenfunktion inplementiert
+ * 15.09.2011 Rauswurffunktion inplementiert
+ * 15.09.2011 Spielfigurenspeicher auf 2D Array umgestellt
+ * 17.09.2011 Nur bei 6 aus dem Haus ziehen
+ * 17.09.2011 Opitionsdialog inplementiert
+ * 17.09.2011 Rundensystem inplementiert
+ * 17.09.2011 6 = Nochmal Würfeln inplementiert
+ * 17.09.2011 "Zug unmöglich" Erkennung eingebaut
+ * 17.09.2011 erst das Startfeld räumen / bei 6 Figur spielen inplementiert
+ * 18.09.2011 Updater serverseitig eingerichtet und getestet
+ * 18.09.2011 Spielerauswahl ist nun möglich
+ * 18.09.2011 Neuer Würfelbutton (Bild)
+ * 18.09.2011 "Schnelles" und "Langsames" ziehen inplementiert
+ * 18.09.2011 Div Regelergänzungen und Optimierungen am Quellcode
+ * 18.09.2011 Schlagzwang inplementiert
+ * 
+ * Changelog 1.0:
+ * Version 1.0 Beta3.3
+ * 18.11.09 BugFix: Letze Figur muss das Startfeld nun nicht mehr Leer machen - thx Gruselmädchen
+ * 18.11.09 BugFix: Rauswerfen klappte nicht richtig - thx Daniel
+ * 18.11.09 BugFix: Die Figuren haben bei nichtgewürfelten würfel den Zug beendet
+ * 19.11.09 BugFix: Wurf konnte verworfen werden eine Gigur im Ziel war obwohl 
+ *                  Zug mit anderer Figur möglich gewesen wäre (noch nicht 100%)- thx Gruselmädchen
+ * 
+ * Version 1.0 Beta3.2
+ * 15.11.09 BugFix: Farbanzeige beim Vanillaspiel war fehlerhaft - thx Daniel
+ * 15.11.09 Einstellung: Langsames Ziehen steht nun zur verfügung
+ * 16.11.09 Rausschmeißen möglich check eingebaut
+ * 16.11.09 BugFix und Verbesserte Fehlermeldungen beim Updater - thx Torben und Paddy
+ * 17.11.09 Reset Funktion inplementiert (Figuren einzeln zurücksetzbar)
+ * 17.11.09 Code Cleanup u.a. Rausschmeißfunktion
+ * 17.11.09 EinstellungsButton & Neues Spiel Button nun inplementiert - thx Daniel
+ * 18.11.09 WaitCoursor bei Update eingebaut
+ *  
+ * Version 1.0 Beta3.1
+ * 14.11.09 Figuren Coursur auf "Hand" geändert - thx Gruselmädchen
+ * 14.11.09 BugFix: Rot startet auch wenn ausgeschaltet - thx Rike
+ * 15.11.09 Einstellungsmenu eingefügt
+ * 15.11.09 Farbanzeige angepasst - thx Rike
+ * 15.11.09 Diverse Regeln eingeführt 
+ * 15.11.09 Varianten eingeführt - thx Rike
+ * 15.11.09 BugFix: Gewonnenmeldung ne Runde zu spät - thx Gruselmädchen
+ * 
+ * Version 1.0 Beta3
+ * 14.11.09 Figurenrand ist jetzt durchsichtig 
+ * 14.11.09 Komplettes Design überarbeitet - thx Paddy
+ * 14.11.09 Schrittfunktion wieder entfernt, zu langsam 
+ * 
+ * Version 1.0 Beta2.1
+ * 14.11.09 BugFix: Figuren wurde ohne Grund ab und zu zurückgesetzt 
+ * 14.11.09 Figuren laufen jetzt jeden Schritt einzelnd 
+ * 
+ * Version 1.0 Beta2
+ * 14.11.09 Figuren nun an und abschaltbar 
+ * 14.11.09 BugFix: Figuren beeinflussten zählfuntkion wenn man sie klicke und alle im Haus waren - thx paddy
+ * 14.11.09 BugFix: Wenn kein Zug möglich war durfte man nicht 3 mal Würfeln 
+ * 14.11.09 BugFix: Diverse kleinere Bugs die nicht bekannt aber möglich waren 
+ * 14.11.09 6en können nur ausgespielt werden wenn das Haus leer ist. 
+ * 14.11.09 Erstes Feld muss nun immer zuerst frei gemacht werden. 
+ * 14.11.09 Zug kann jetzt nur verworfen werden wenn nix anderes mehr möglich ist. 
+ * 
+ * Version 1.0 Beta1
+ * 19.10.09 Form entworfen und Bilder und Icons integriert 
+ * 19.10.09 Wuefelmechanismus integriert 
+ * 20.10.09 Alle Spielfiguren integriert 
+ * 20.10.09 Roten und Gelben "Bewegungsmechanismus" integriert 
+ * 20.10.09 Updater ungetestet (und deaktiviert) integriert 
+ * 27.10.09 Verbesserter Bewegungsmechanismus für alle Figuren integriert 
+ * 27.10.09 Rausschmeißfunktion Funktion integriert 
+ * 10.11.09 Zugsystem ist nun Rundenbasierend 
+ * 10.11.09 Bei 6 Nochmalwürfeln Regel integriert 
+ * 10.11.09 6 um Figur zu Starten ist nötig 
+ * 10.11.09 Wenn alle Figuren auf Startposition sind hat man 3 Versuche 
+ * 10.11.09 Updater fertiggestellt und aktiviert + MainServer eingerichtet 
+ * 11.11.09 About Info Integriert 
+ * 11.11.09 Diverse Anzeigenanpassung und kleine Ausbesserungen 
+ */
